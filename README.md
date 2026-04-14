@@ -1,4 +1,4 @@
-# FedDAP: Domain-Aware Prototype Learning for Federated Learning under Domain Shift [CVPR 2026]
+## FedDAP: Domain-Aware Prototype Learning for Federated Learning under Domain Shift [CVPR 2026]
 
 Paper: https://arxiv.org/abs/2604.06795
 
