@@ -91,11 +91,11 @@ python main.py --model feddap --dataset fl_pacs  --communication_epoch 100 --loc
 If you use this repository in your research, please cite the paper:
 
 ```bibtex
-@inproceedings{feddap_cvpr2026,
-	author={Huy Q. Le and Loc X. Nguyen and Yu Qiao and Seong Tae Kim and Eui-Nam Huh and Choong Seon Hong},
-	title={FedDAP: Domain-Aware Prototype Learning for Federated Learning under Domain Shift},
-	booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-	year={2026}
+@article{le2026feddap,
+  title={FedDAP: Domain-Aware Prototype Learning for Federated Learning under Domain Shift},
+  author={Le, Huy Q and Nguyen, Loc X and Qiao, Yu and Kim, Seong Tae and Huh, Eui-Nam and Hong, Choong Seon},
+  journal={arXiv preprint arXiv:2604.06795},
+  year={2026}
 }
 ```
 
