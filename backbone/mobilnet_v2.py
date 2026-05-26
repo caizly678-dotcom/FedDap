@@ -106,3 +106,6 @@ class MobileNetV2(nn.Module):
         # out = out.view(out.size(0), -1)
         out = self.linear(x)
         return out
+
+    def classifier(self, x):
+        return self.linear(x)

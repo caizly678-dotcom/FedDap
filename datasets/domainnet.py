@@ -16,9 +16,9 @@ class ImageFolder_Custom(DatasetFolder):
         self.transform = transform
         self.target_transform = target_transform
         if train:
-            self.imagefolder_obj = ImageFolder(self.root + 'domain/' + self.data_name + '/', self.transform, self.target_transform)
+            self.imagefolder_obj = ImageFolder(self.root + 'DomainNet/' + self.data_name + '/', self.transform, self.target_transform)
         else:
-            self.imagefolder_obj = ImageFolder(self.root + 'domain/' + self.data_name + '/', self.transform, self.target_transform)
+            self.imagefolder_obj = ImageFolder(self.root + 'DomainNet/' + self.data_name + '/', self.transform, self.target_transform)
 
         all_data=self.imagefolder_obj.samples
         self.train_index_list=[]
@@ -156,4 +156,3 @@ class FedLeaDomainNet(FederatedDataset):
         transform = DeNormalize((0.485, 0.456, 0.406),
                                 (0.229, 0.224, 0.225))
         return transform
-

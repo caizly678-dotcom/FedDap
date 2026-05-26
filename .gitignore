@@ -1,0 +1,11 @@
+*.log
+logs/
+output/
+data/
+datasets/
+*.npy
+*.tar.gz
+*.zip
+*.pth
+*.pt
+__pycache__/

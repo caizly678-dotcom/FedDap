@@ -8,7 +8,7 @@ def get_device(device_id) -> torch.device:
 
 
 def data_path() -> str:
-    return './datasets/pic_cls/'
+    return '/workspace/FedPHA/DATA/'
 
 
 def base_path() -> str:

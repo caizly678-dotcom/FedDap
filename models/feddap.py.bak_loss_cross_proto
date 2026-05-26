@@ -36,16 +36,6 @@ def agg_func(protos):
     return protos
 
 
-
-def dp(proto, diff_privacy_scale=0.05, diff_privacy_perturbation=0.1):
-    """
-    FedDAP reproduction patch:
-    The original code calls dp() inside agg_func_dp(), but dp() is not defined.
-    For reproducing the paper's main FedDAP result, we keep prototypes unchanged.
-    """
-    return proto
-
-
 def agg_func_dp(protos,dps=0.0,dpp=0.0):
     """
     Returns the average of the weights.
@@ -284,9 +274,7 @@ class feddap(FederatedModel):
 
                 loss = lossCE  + self.args.lamda_1*loss_intra_proto + self.args.lamda_2*loss_InfoNCE
                 loss.backward()
-                lossCE_show = lossCE.item() if hasattr(lossCE, "item") else float(lossCE)
-                loss_InfoNCE_show = loss_InfoNCE.item() if hasattr(loss_InfoNCE, "item") else float(loss_InfoNCE)
-                iterator.desc = "Local Participant %d CE = %0.3f, InfoNCE = %0.3f" % (index, lossCE_show, loss_InfoNCE_show)
+                iterator.desc = "Local Pariticipant %d CE = %0.3f,InfoNCE = %0.3f" % (index, lossCE, loss_cross_proto)
                 optimizer.step()
 
                 if iter == self.local_epoch - 1:

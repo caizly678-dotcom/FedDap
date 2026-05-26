@@ -36,16 +36,6 @@ def agg_func(protos):
     return protos
 
 
-
-def dp(proto, diff_privacy_scale=0.05, diff_privacy_perturbation=0.1):
-    """
-    FedDAP reproduction patch:
-    The original code calls dp() inside agg_func_dp(), but dp() is not defined.
-    For reproducing the paper's main FedDAP result, we keep prototypes unchanged.
-    """
-    return proto
-
-
 def agg_func_dp(protos,dps=0.0,dpp=0.0):
     """
     Returns the average of the weights.

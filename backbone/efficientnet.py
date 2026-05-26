@@ -173,6 +173,9 @@ class EfficientNet(nn.Module):
         out = self.linear(x)
         return out
 
+    def classifier(self, x):
+        return self.linear(x)
+
 
 def EfficientNetB0(num_classes=10):
     cfg = {
@@ -185,4 +188,3 @@ def EfficientNetB0(num_classes=10):
         'drop_connect_rate': 0.2,
     }
     return EfficientNet(cfg,num_classes)
-

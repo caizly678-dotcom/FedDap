@@ -388,6 +388,11 @@ def partition_office_domain_skew_loaders_new(train_datasets: list, test_datasets
     return setting.train_loaders, setting.test_loader
 
 
+def partition_office_domain_label_skew_loaders_new(train_datasets: list, test_datasets: list,
+                                                   setting: FederatedDataset) -> Tuple[list, list]:
+    return partition_office_domain_skew_loaders_new(train_datasets, test_datasets, setting)
+
+
 
 def partition_office_domain_skew_loaders(train_datasets: list, test_datasets: list,
                                          setting: FederatedDataset) -> Tuple[list, list]:

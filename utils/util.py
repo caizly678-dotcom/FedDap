@@ -9,6 +9,11 @@ def create_if_not_exists(path: str) -> None:
         os.makedirs(path)
 
 
+def set_requires_grad(model, requires_grad: bool = True) -> None:
+    for param in model.parameters():
+        param.requires_grad = requires_grad
+
+
 def off_diagonal(x):
     n, m = x.shape
     assert n == m
