@@ -214,13 +214,7 @@ class feddap(FederatedModel):
             self._train_net(i, self.nets_list[i], priloader_list[i],self.client_domains[i])
 
         # self.global_protos = self.proto_aggregation_avg(self.local_protos)
-        tau_agg = getattr(self.args, "tau_agg", None)
-        if tau_agg is None:
-            if self.args.dataset == "fl_officecaltech":
-                tau_agg = 0.01
-            else:
-                tau_agg = 0.001
-        self.global_protos = self.proto_aggregation_attn(self.local_protos, temperature=tau_agg) # domain specific prototype aggregation
+        self.global_protos = self.proto_aggregation_attn(self.local_protos,temperature=0.001) #domain specific prototype aggregation
         self.aggregate_nets(None)
         return None
 

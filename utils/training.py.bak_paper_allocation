@@ -70,57 +70,53 @@ def train(model: FederatedModel, private_dataset: FederatedDataset,
     domains_len = len(domains_list)
 
     print("🔹 Running Domain Skew Setting")
+    if args.rand_dataset:
+        max_num = 10
+        is_ok = False
 
-    def _find_domain(name_candidates):
-        names = [str(x) for x in domains_list]
-        lowered = [x.lower() for x in names]
-        for cand in name_candidates:
-            cand = cand.lower()
-            for raw, low in zip(domains_list, lowered):
-                if low == cand or cand in low:
-                    return raw
-        raise ValueError(f"Cannot find domain from candidates={name_candidates}, domains_list={domains_list}")
+        while not is_ok:
+            if model.args.dataset == 'fl_officecaltech':
+                selected_domain_list = np.random.choice(domains_list, size=args.parti_num - domains_len, replace=True, p=None)
+                selected_domain_list = list(selected_domain_list) + domains_list
+            elif model.args.dataset == 'fl_digits':
+                selected_domain_list = np.random.choice(domains_list, size=args.parti_num, replace=True, p=None)
+            elif model.args.dataset == 'fl_pacs':
+                selected_domain_list = np.random.choice(domains_list, size=args.parti_num - domains_len, replace=True,
+                                                        p=None)
+                selected_domain_list = list(selected_domain_list) + domains_list
+            elif model.args.dataset == 'fl_vlcs':
+                selected_domain_list = np.random.choice(domains_list, size=args.parti_num, replace=True, p=None)
+            elif model.args.dataset == 'fl_domainnet':
+                selected_domain_list = np.random.choice(domains_list, size=args.parti_num, replace=True, p=None)
 
-    # Paper main-setting client allocation:
-    # Office-10: Caltech(3), Amazon(2), Webcam(1), DSLR(4)
-    # PACS: Photo(3), Art Painting(2), Cartoon(1), Sketch(4)
-    # DomainNet: Clipart(3), Infograph(1), Painting(4), Quickdraw(6), Real(4), Sketch(2)
-    if model.args.dataset == 'fl_officecaltech':
-        caltech = _find_domain(['caltech'])
-        amazon = _find_domain(['amazon'])
-        webcam = _find_domain(['webcam'])
-        dslr = _find_domain(['dslr'])
-        selected_domain_list = [caltech] * 3 + [amazon] * 2 + [webcam] * 1 + [dslr] * 4
+            result = dict(Counter(selected_domain_list))
 
-    elif model.args.dataset == 'fl_pacs':
-        photo = _find_domain(['photo'])
-        art = _find_domain(['art_painting', 'art'])
-        cartoon = _find_domain(['cartoon'])
-        sketch = _find_domain(['sketch'])
-        selected_domain_list = [photo] * 3 + [art] * 2 + [cartoon] * 1 + [sketch] * 4
-
-    elif model.args.dataset == 'fl_domainnet':
-        clipart = _find_domain(['clipart'])
-        infograph = _find_domain(['infograph'])
-        painting = _find_domain(['painting'])
-        quickdraw = _find_domain(['quickdraw'])
-        real = _find_domain(['real'])
-        sketch = _find_domain(['sketch'])
-        selected_domain_list = [clipart] * 3 + [infograph] * 1 + [painting] * 4 + [quickdraw] * 6 + [real] * 4 + [sketch] * 2
+            for k in result:
+                if result[k] > max_num:
+                    is_ok = False
+                    break
+            else:
+                is_ok = True
 
     else:
-        # fallback for other datasets
-        selected_domain_list = list(np.random.choice(domains_list, size=args.parti_num, replace=True, p=None))
+        if model.args.dataset == 'fl_digits':
+            selected_domain_dict = {'mnist': 5, 'usps': 5, 'svhn': 5, 'syn': 5}
+        elif model.args.dataset == 'fl_pacs':
+            selected_domain_dict = {'photo': 3, 'art_painting': 3, 'cartoon': 3, 'sketch': 3}
+        elif model.args.dataset == 'fl_officecaltech':
+            selected_domain_dict = {'caltech': 3, 'amazon': 3, 'webcam': 3, 'dslr': 3}
+        elif model.args.dataset == 'fl_domainnet':
+            selected_domain_dict = {'clipart': 3, 'infograph': 1, 'painting': 4, 'quickdraw': 6, 'real': 4, 'sketch': 2}
 
-    if len(selected_domain_list) != args.parti_num:
-        raise ValueError(
-            f"Paper allocation requires parti_num={len(selected_domain_list)} for {model.args.dataset}, "
-            f"but got parti_num={args.parti_num}. selected_domain_list={selected_domain_list}"
-        )
+        selected_domain_list = []
+        for k in selected_domain_dict:
+            domain_num = selected_domain_dict[k]
+            for i in range(domain_num):
+                selected_domain_list.append(k)
 
-    rng = np.random.RandomState(args.seed if args.seed is not None else 0)
-    selected_domain_list = list(rng.permutation(selected_domain_list))
-    result = Counter(selected_domain_list)
+        selected_domain_list = np.random.permutation(selected_domain_list)
+
+        result = Counter(selected_domain_list)
     print(result)
 
     print(selected_domain_list)
